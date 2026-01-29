@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Post - Simple Board</title>
+</head>
+<body>
+
+    <!-- Header -->
+    <div style="border:1px solid #000; padding:10px; margin-bottom:30px;">
+        <strong>Simple Board</strong>
+    </div>
+
+    <!-- Create Form -->
+    <form method="post" onsubmit="return validateForm()">
+        <!-- Title -->
+        <div style="margin-bottom:20px;">
+            <label><strong>Title</strong></label><br>
+            <input
+                type="text"
+                name="title"
+                placeholder="Enter title..."
+                id="title"
+                style="width:100%; padding:8px;"
+            >
+        </div>
+
+        <!-- Content -->
+        <div style="margin-bottom:20px;">
+            <label><strong>Content</strong></label><br>
+            <textarea
+                name="content"
+                placeholder="Enter content..."
+                rows="10"
+                id="content"
+                style="width:100%; padding:8px;"
+            ></textarea>
+        </div>
+
+        <!-- Buttons -->
+        <div style="text-align:right;">
+            <a href="/" style="padding:8px 16px; border:1px solid #000; text-decoration:none;">
+                Cancel
+            </a>
+            <button
+                type="submit"
+                style="padding:8px 16px; margin-left:10px;"
+            >
+                Submit
+            </button>
+        </div>
+
+    </form>
+
+    <script>
+        function validateForm() {
+            const title = document.getElementById("title").value.trim();
+            const content = document.getElementById("content").value.trim();
+
+            if (title === "" || content === "") {
+                alert("Title and Content are required");
+                return false; 
+            }
+
+            return true; 
+        }
+    </script>
+
+</body>
+</html>
