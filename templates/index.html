@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Board</title>
+</head>
+<body>
+
+    <!-- Header -->
+    <h1>Simple Board</h1>
+
+    <hr>
+
+    <!-- Search & Sort -->
+    <form method="get" action="/">
+        <input type="text" name="q" placeholder="Search...">
+        <button type="submit">Search</button>
+
+        <br><br>
+
+        Sort :
+        <a href="?sort=latest">Latest</a> |
+        <a href="?sort=oldest">Oldest</a> |
+        <a href="?sort=views">Views</a> |
+        <a href="?sort=title">Title</a>
+
+        &nbsp;&nbsp;&nbsp;
+
+        <a href="/write">
+            <button type="button">Write</button>
+        </a>
+    </form>
+
+    <hr>
+
+    <!-- Post List Table -->
+    <table border="1" width="100%" cellpadding="5" cellspacing="0">
+        <thead>
+            <tr>
+                <th width="5%">No.</th>
+                <th align="left">Title</th>
+                <th width="15%">Date</th>
+                <th width="10%">Views</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Example static data -->
+            <tr>
+                <td align="center">3</td>
+                <td>
+                    <a href="/post/3">Welcome to Simple Board</a>
+                </td>
+                <td align="center">2024-01-03</td>
+                <td align="center">42</td>
+            </tr>
+            <tr>
+                <td align="center">2</td>
+                <td>
+                    <a href="/post/2">How to use this board</a>
+                </td>
+                <td align="center">2024-01-02</td>
+                <td align="center">28</td>
+            </tr>
+            <tr>
+                <td align="center">1</td>
+                <td>
+                    <a href="/post/1">First post example</a>
+                </td>
+                <td align="center">2024-01-01</td>
+                <td align="center">15</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <br>
+
+    <br><br>
+
+
+</body>
+</html>
