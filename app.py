@@ -11,15 +11,61 @@ def get_db():
     conn.row_factory = sqlite3.Row
     return conn
 
+PER_PAGE = 10
+
 @app.route("/")
 def index():
     conn = get_db()
     cursor = conn.cursor()
     
-    cursor.execute("SELECT * FROM posts ORDER BY id DESC")
+    q = request.args.get("q", "").strip()
+    sort = request.args.get("sort", "latest")
+    page = request.args.get("page", 1, type=int)
+    if page < 1:
+        page = 1
+    
+    # Base filter for search
+    if q:
+        search_arg = f"%{q}%"
+        where = "WHERE title LIKE ? OR content LIKE ?"
+        count_args = (search_arg, search_arg)
+        list_args = (search_arg, search_arg)
+    else:
+        where = ""
+        count_args = ()
+        list_args = ()
+    
+    # Total count (with search)
+    cursor.execute(f"SELECT COUNT(*) FROM posts {where}", count_args)
+    total = cursor.fetchone()[0]
+    total_pages = max(1, (total + PER_PAGE - 1) // PER_PAGE)
+    page = min(page, total_pages)
+    offset = (page - 1) * PER_PAGE
+    
+    # Sort order
+    order = {
+        "latest": "id DESC",
+        "oldest": "id ASC",
+        "views": "views DESC",
+        "title": "title ASC",
+    }.get(sort, "id DESC")
+    
+    cursor.execute(
+        f"SELECT * FROM posts {where} ORDER BY {order} LIMIT ? OFFSET ?",
+        list_args + (PER_PAGE, offset),
+    )
     posts = cursor.fetchall()
     conn.close()
-    return render_template("index.html", posts=posts)
+    
+    return render_template(
+        "index.html",
+        posts=posts,
+        page=page,
+        total_pages=total_pages,
+        total=total,
+        q=q,
+        sort=sort,
+    )
 
 @app.route("/create", methods=["GET", "POST"])
 def create():
