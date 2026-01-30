@@ -2,44 +2,161 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Simple Board</title>
+    <title>Post List - Simple Board</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #fff;
+        }
+
+        .container {
+            width: 700px;
+            margin: 40px auto;
+        }
+
+        .page-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .board-title {
+            border: 2px solid #000;
+            padding: 10px;
+            font-weight: bold;
+            background: #f5f5f5;
+            margin-bottom: 20px;
+        }
+
+        .optional-section {
+            border: 1px solid #ccc;
+            background: #fafafa;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .controls-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-sort {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .search-sort input[type="text"] {
+            padding: 6px 10px;
+            border: 2px solid #000;
+            width: 200px;
+            margin-right: 5px;
+        }
+
+        .search-sort .sort-links {
+            margin-top: 10px;
+        }
+
+        .btn-write {
+            padding: 6px 18px;
+            border: 2px solid #000;
+            background: #333;
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .btn-write:hover {
+            background: #000;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 2px solid #000;
+        }
+
+        table thead th {
+            border: 2px solid #000;
+            padding: 10px;
+            background: #f5f5f5;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        table thead th:first-child,
+        table tbody td:first-child { text-align: center; }
+        table thead th:nth-child(3),
+        table tbody td:nth-child(3) { text-align: center; }
+        table thead th:nth-child(4),
+        table tbody td:nth-child(4) { text-align: center; }
+
+        table tbody td {
+            border: 2px solid #000;
+            padding: 10px;
+            background: #fff;
+        }
+
+        table tbody tr td a {
+            color: #000;
+            text-decoration: none;
+        }
+
+        table tbody tr td a:hover {
+            text-decoration: underline;
+        }
+
+        .pagination-wrap {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            background: #fafafa;
+            padding: 12px 15px;
+        }
+
+        .pagination-wrap a {
+            color: #000;
+            text-decoration: none;
+            margin: 0 4px;
+        }
+
+        .pagination-wrap a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
 
-    <!-- Header -->
-    <h1>Simple Board</h1>
+<div class="container">
+    <div class="page-title">Page 1: Post List</div>
+    <div class="board-title">Simple Board</div>
 
-    <hr>
+    <div class="optional-section">
+        <form method="get" action="/">
+            <input type="hidden" name="sort" value="{{ sort }}">
+            <div class="controls-row">
+                <div class="search-sort">
+                    <input type="text" name="q" placeholder="Search..." value="{{ q }}">
+                    <button type="submit">Search</button>
+                    <div class="sort-links">
+                        Sort: <a href="?q={{ q }}&sort=latest&page=1">Latest</a> |
+                        <a href="?q={{ q }}&sort=oldest&page=1">Oldest</a> |
+                        <a href="?q={{ q }}&sort=views&page=1">Views</a> |
+                        <a href="?q={{ q }}&sort=title&page=1">Title</a>
+                    </div>
+                </div>
+                <a href="/create" class="btn-write">Write</a>
+            </div>
+        </form>
+    </div>
 
-    <!-- Search & Sort -->
-    <form method="get" action="/">
-        <input type="text" name="q" placeholder="Search..." value="{{ q }}">
-        <input type="hidden" name="sort" value="{{ sort }}">
-        <button type="submit">Search</button>
-
-        <br><br>
-
-        Sort :
-        <a href="?q={{ q }}&sort=latest&page=1">Latest</a> |
-        <a href="?q={{ q }}&sort=oldest&page=1">Oldest</a> |
-        <a href="?q={{ q }}&sort=views&page=1">Views</a> |
-        <a href="?q={{ q }}&sort=title&page=1">Title</a>
-
-        &nbsp;&nbsp;&nbsp;
-
-        <a href="/create">
-            <button type="button">Write</button>
-        </a>
-    </form>
-
-    <hr>
-
-    <!-- Post List Table -->
-    <table border="1" width="100%" cellpadding="5" cellspacing="0">
+    <table>
         <thead>
             <tr>
                 <th width="5%">No.</th>
-                <th align="left">Title</th>
+                <th>Title</th>
                 <th width="15%">Date</th>
                 <th width="10%">Views</th>
             </tr>
@@ -48,53 +165,32 @@
             {% if posts %}
                 {% for post in posts %}
                 <tr>
-                    <td align="center">{{ post['id'] }}</td>
-                    <td>
-                        <a href="/post/{{ post['id'] }}">{{ post['title'] }}</a>
-                    </td>
-                    <td align="center">{{ post['created_at'][:10] }}</td>
-                    <td align="center">{{ post['views'] }}</td>
+                    <td>{{ post['id'] }}</td>
+                    <td><a href="/post/{{ post['id'] }}">{{ post['title'] }}</a></td>
+                    <td>{{ post['created_at'][:10] }}</td>
+                    <td>{{ post['views'] }}</td>
                 </tr>
                 {% endfor %}
             {% else %}
                 <tr>
-                    <td colspan="4" align="center">No posts yet. <a href="/create">Create one!</a></td>
+                    <td colspan="4" style="text-align: center;">No posts yet. <a href="/create">Create one!</a></td>
                 </tr>
             {% endif %}
         </tbody>
     </table>
 
-    <br>
-
-    <!-- Pagination -->
     {% if total_pages > 1 %}
-    <p>
-        Page {{ page }} of {{ total_pages }} ({{ total }} post{{ 's' if total != 1 else '' }})
-        &nbsp;|&nbsp;
-        {% if page > 1 %}
-        <a href="?q={{ q }}&sort={{ sort }}&page={{ page - 1 }}">Prev</a>
-        {% else %}
-        Prev
-        {% endif %}
-        &nbsp;
+    <div class="pagination-wrap">
+        {% if page > 1 %}<a href="?q={{ q }}&sort={{ sort }}&page={{ page - 1 }}">&lt;</a>{% else %}&lt;{% endif %}
         {% for p in range(1, total_pages + 1) %}
-            {% if p == page %}
-            <strong>{{ p }}</strong>
-            {% else %}
-            <a href="?q={{ q }}&sort={{ sort }}&page={{ p }}">{{ p }}</a>
-            {% endif %}
-            {% if not loop.last %} &nbsp; {% endif %}
+            {% if p == page %}<strong>{{ p }}</strong>{% else %}<a href="?q={{ q }}&sort={{ sort }}&page={{ p }}">{{ p }}</a>{% endif %}
+            {% if not loop.last %} {% endif %}
         {% endfor %}
-        &nbsp;
-        {% if page < total_pages %}
-        <a href="?q={{ q }}&sort={{ sort }}&page={{ page + 1 }}">Next</a>
-        {% else %}
-        Next
-        {% endif %}
-    </p>
+        {% if page < total_pages %}<a href="?q={{ q }}&sort={{ sort }}&page={{ page + 1 }}">&gt;</a>{% else %}&gt;{% endif %}
+        &nbsp; (Page {{ page }} of {{ total_pages }}, {{ total }} post{{ 's' if total != 1 else '' }})
+    </div>
     {% endif %}
-
-    <br><br>
+</div>
 
 </body>
 </html>

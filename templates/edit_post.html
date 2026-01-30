@@ -57,25 +57,35 @@
         .button-row {
             margin-top: 15px;
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end;
             align-items: center;
+            gap: 10px;
         }
 
-        button {
+        .btn-cancel {
             padding: 6px 18px;
             border: 2px solid #000;
             background: #fff;
             cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-cancel:hover {
+            background: #f0f0f0;
         }
 
         .update-btn {
+            padding: 6px 18px;
+            border: 2px solid #333;
             background: #333;
             color: #fff;
-            border-color: #333;
+            cursor: pointer;
+            font-size: 14px;
         }
 
         .update-btn:hover {
             background: #000;
+            border-color: #000;
         }
     </style>
 </head>
@@ -99,7 +109,7 @@
         <textarea id="content" name="content">{{ post['content'] }}</textarea>
 
         <div class="button-row">
-            <button type="button" onclick="history.back()">Cancel</button>
+            <a href="/post/{{ post['id'] }}" class="btn-cancel">Cancel</a>
             <button type="submit" class="update-btn">Update</button>
         </div>
     </form>
