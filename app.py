@@ -41,5 +41,29 @@ def create():
     
     return render_template("create.html")
 
+@app.route("/post/<int:post_id>")
+def post_detail(post_id):
+    conn = get_db()
+    cursor = conn.cursor()
+    
+    # Fetch the post
+    cursor.execute("SELECT * FROM posts WHERE id = ?", (post_id,))
+    post = cursor.fetchone()
+    
+    if post is None:
+        conn.close()
+        return "Post not found", 404
+    
+    #view count +1
+    cursor.execute("UPDATE posts SET views = views + 1 WHERE id = ?", (post_id,))
+    conn.commit()
+    
+    # Fetch updated post with new view count
+    cursor.execute("SELECT * FROM posts WHERE id = ?", (post_id,))
+    post = cursor.fetchone()
+    
+    conn.close()
+    return render_template("post_detail.html", post=post)
+
 if __name__ == "__main__":
     app.run(debug=True)

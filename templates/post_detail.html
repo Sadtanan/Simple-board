@@ -90,26 +90,28 @@
 
     <div class="board-title">Simple Board</div>
 
-    <div class="post-title">Welcome to Simple Board</div>
+    <div class="post-title">{{ post['title'] }}</div>
 
     <div class="meta">
-        Created: 2024-01-03 14:30:25 &nbsp;|&nbsp; Views: 42
+        Created: {{ post['created_at'] }} &nbsp;|&nbsp; Views: {{ post['views'] }}
     </div>
 
     <hr>
 
-    <div class="content-box">
-This is the post content.
-It can contain multiple lines of text.
-The content is displayed here.
-    </div>
+    <div class="content-box">{{ post['content'] }}</div>
 
     <div class="button-row">
-        <button>List</button>
+        <a href="{{ url_for('index') }}">
+            <button>List</button>
+        </a>
 
         <div class="right-buttons">
-            <button>Edit</button>
-            <button>Delete</button>
+            <a href="/edit/{{ post['id'] }}">
+                <button>Edit</button>
+            </a>
+            <a href="/delete/{{ post['id'] }}">
+                <button>Delete</button>
+            </a>
         </div>
     </div>
 </div>
