@@ -86,25 +86,37 @@
 
     <div class="board-title">Simple Board</div>
 
-    <form method="post">
+    <form method="post" onsubmit="return validateForm()">
         <label for="title">Title</label>
         <input
             type="text"
             id="title"
             name="title"
-            value="Welcome to Simple Board"
+            value="{{ post['title'] }}"
         >
 
         <label for="content">Content</label>
-        <textarea id="content" name="content">This is the post content.
-It can contain multiple lines of text.
-The content is displayed here.</textarea>
+        <textarea id="content" name="content">{{ post['content'] }}</textarea>
 
         <div class="button-row">
             <button type="button" onclick="history.back()">Cancel</button>
             <button type="submit" class="update-btn">Update</button>
         </div>
     </form>
+
+    <script>
+        function validateForm() {
+            const title = document.getElementById("title").value.trim();
+            const content = document.getElementById("content").value.trim();
+
+            if (title === "" || content === "") {
+                alert("Title and Content are required");
+                return false; 
+            }
+
+            return true; 
+        }
+    </script>
 </div>
 
 </body>

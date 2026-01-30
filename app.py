@@ -65,5 +65,48 @@ def post_detail(post_id):
     conn.close()
     return render_template("post_detail.html", post=post)
 
+@app.route("/edit/<int:post_id>", methods=["GET", "POST"])
+def edit_post(post_id):
+    conn = get_db()
+    cursor = conn.cursor()
+    
+    if request.method == "POST":
+        title = request.form.get("title")
+        content = request.form.get("content")
+        
+        # Same validation as create
+        if title and content:
+            cursor.execute(
+                "UPDATE posts SET title = ?, content = ? WHERE id = ?",
+                (title, content, post_id)
+            )
+            conn.commit()
+            conn.close()
+            return redirect(url_for("post_detail", post_id=post_id))
+    
+    # GET: Fetch post and pre-fill form
+    cursor.execute("SELECT * FROM posts WHERE id = ?", (post_id,))
+    post = cursor.fetchone()
+    
+    if post is None:
+        conn.close()
+        return "Post not found", 404
+    
+    conn.close()
+    return render_template("edit_post.html", post=post)
+
+@app.route("/delete/<int:post_id>")
+def delete_post(post_id):
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT id FROM posts WHERE id = ?", (post_id,))
+    if cursor.fetchone() is None:
+        conn.close()
+        return "Post not found", 404
+    cursor.execute("DELETE FROM posts WHERE id = ?", (post_id,))
+    conn.commit()
+    conn.close()
+    return redirect(url_for("index"))
+
 if __name__ == "__main__":
     app.run(debug=True)

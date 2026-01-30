@@ -109,8 +109,8 @@
             <a href="/edit/{{ post['id'] }}">
                 <button>Edit</button>
             </a>
-            <a href="/delete/{{ post['id'] }}">
-                <button>Delete</button>
+            <a href="/delete/{{ post['id'] }}" onclick="return confirm('Are you sure you want to delete this post?');">
+                <button type="button">Delete</button>
             </a>
         </div>
     </div>
